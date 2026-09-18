@@ -338,7 +338,7 @@ footer .fd{font-family:var(--sans);font-weight:500;font-size:.74rem;letter-spaci
   </div>
 </section>
 
-<audio id="bgm" loop preload="auto" src="Music.mp3" crossorigin="anonymous"></audio>
+<audio id="bgm" loop preload="auto" src="Music.mp3"></audio>
 <button class="sound off" id="snd" aria-label="Turn the music on or off" aria-pressed="false" hidden>
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 9v6h4l5 4V5L8 9H4z"/>
@@ -365,35 +365,13 @@ footer .fd{font-family:var(--sans);font-weight:500;font-size:.74rem;letter-spaci
   });
 
   var bgm=document.getElementById("bgm"),snd=document.getElementById("snd"),fadeT=null;
-  var LEVEL=0.30, actx=null, gain=null, cur=0;
-  function audioGraph(){
-    // iOS Safari ignores audio.volume, so route the track through a Web Audio gain node
-    if(actx||!(window.AudioContext||window.webkitAudioContext))return;
-    try{
-      actx=new (window.AudioContext||window.webkitAudioContext)();
-      var src=actx.createMediaElementSource(bgm);
-      gain=actx.createGain(); gain.gain.value=0;
-      src.connect(gain); gain.connect(actx.destination);
-    }catch(e){actx=null;gain=null;}
-  }
-  function setLevel(v){
-    cur=v;
-    if(gain&&actx){
-      try{gain.gain.cancelScheduledValues(actx.currentTime);
-        gain.gain.setValueAtTime(gain.gain.value,actx.currentTime);
-        gain.gain.linearRampToValueAtTime(v,actx.currentTime+0.6);return true;}catch(e){}
-    }
-    return false;
-  }
+  var LEVEL=0.55;
   function fadeTo(v,ms){
-    if(actx&&actx.state==="suspended"){try{actx.resume()}catch(e){}}
-    if(setLevel(v)){ if(v===0)setTimeout(function(){if(cur===0)bgm.pause()},700); return; }
     clearInterval(fadeT); var from=bgm.volume, steps=Math.max(1,Math.round(ms/50)), i=0;
     fadeT=setInterval(function(){i++;bgm.volume=Math.min(1,Math.max(0,from+(v-from)*i/steps));
       if(i>=steps){clearInterval(fadeT); if(v===0)bgm.pause();}},50);
   }
   function startMusic(){
-    audioGraph();
     bgm.volume=0;
     var pr=bgm.play();
     if(pr&&pr.catch)pr.catch(function(){snd.classList.add("off");snd.setAttribute("aria-pressed","false");});
