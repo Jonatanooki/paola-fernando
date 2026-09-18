@@ -374,10 +374,10 @@ footer .fd{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;opacit
     var pr=bgm.play();
     if(pr&&pr.catch)pr.catch(function(){snd.classList.add("off");snd.setAttribute("aria-pressed","false");});
     snd.hidden=false; snd.classList.remove("off"); snd.setAttribute("aria-pressed","true");
-    fadeTo(.34,1800);
+    fadeTo(.15,1800);
   }
   snd.addEventListener("click",function(){
-    if(snd.classList.contains("off")){bgm.play();snd.classList.remove("off");snd.setAttribute("aria-pressed","true");fadeTo(.34,700);}
+    if(snd.classList.contains("off")){bgm.play();snd.classList.remove("off");snd.setAttribute("aria-pressed","true");fadeTo(.15,700);}
     else{snd.classList.add("off");snd.setAttribute("aria-pressed","false");fadeTo(0,500);}
   });
 
